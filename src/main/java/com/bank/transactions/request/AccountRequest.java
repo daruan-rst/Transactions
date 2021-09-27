@@ -2,9 +2,13 @@ package com.bank.transactions.request;
 
 import com.bank.transactions.domain.Account;
 import com.bank.transactions.domain.AccountType;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 public class AccountRequest {
 
     private int accountId;

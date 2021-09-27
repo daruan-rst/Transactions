@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 public class Transaction {
 
     @Id
+    @GeneratedValue
     private int id;
 
     @ManyToOne
@@ -25,6 +26,7 @@ public class Transaction {
 
     private BigDecimal money;
 
+    @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
 }

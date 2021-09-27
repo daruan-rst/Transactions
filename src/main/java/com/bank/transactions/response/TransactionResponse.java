@@ -4,6 +4,7 @@ import com.bank.transactions.domain.Account;
 import com.bank.transactions.domain.Transaction;
 import com.bank.transactions.domain.TransactionType;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@Getter
 public class TransactionResponse {
     private int id;
 
