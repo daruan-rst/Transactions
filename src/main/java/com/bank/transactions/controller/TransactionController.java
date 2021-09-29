@@ -1,12 +1,7 @@
 package com.bank.transactions.controller;
 
-import com.bank.transactions.domain.Account;
 import com.bank.transactions.domain.Transaction;
 import com.bank.transactions.domain.TransactionType;
-import com.bank.transactions.exceptions.InvalidTimeException;
-import com.bank.transactions.exceptions.NotEnoughMoneyException;
-import com.bank.transactions.exceptions.OverTheLimitException;
-import com.bank.transactions.repository.AccountRepository;
 import com.bank.transactions.repository.TransactionRepository;
 import com.bank.transactions.response.TransactionResponse;
 import com.bank.transactions.service.TransactionService;
