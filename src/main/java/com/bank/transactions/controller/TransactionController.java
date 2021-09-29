@@ -17,20 +17,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 import java.net.URI;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/transactions")
 @AllArgsConstructor
 public class TransactionController {
 
-    private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
-    private final Calendar now = Calendar.getInstance();
-    private final int today = now.get(Calendar.DAY_OF_WEEK);
-    private final int hour = now.get(Calendar.HOUR_OF_DAY);
     private final TransactionService transactionService;
 
 
@@ -39,6 +33,12 @@ public class TransactionController {
         var transactions = transactionRepository.findAll();
         return ResponseEntity.ok().body(TransactionResponse.convert(transactions));
     }
+
+    @GetMapping("/bank-statement")
+    public ResponseEntity<List<TransactionResponse>> bankStatement(@RequestParam int accountId){
+        return ResponseEntity.ok().body(TransactionResponse.convert(transactionService.bankStatement(accountId)));
+    }
+
 
     @PostMapping("/deposit")
     public ResponseEntity<TransactionResponse> deposit(

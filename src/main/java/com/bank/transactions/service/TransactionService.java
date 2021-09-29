@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -49,6 +50,10 @@ public class TransactionService {
         Transaction thisTransaction = new Transaction(0, currentAccount, currentAccountId, withdrawAmmount, TransactionType.WITHDRAW);
         transactionRepository.save(thisTransaction);
     return thisTransaction;
+    }
+
+    public List<Transaction> bankStatement(int accountId){
+        return transactionRepository.findTransactionsByCurrentAcc(accountId);
     }
 
     private Account withdrawMoney(int currentAccountId, BigDecimal withdrawAmmount){
