@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-
 public class Account {
 
     @Id

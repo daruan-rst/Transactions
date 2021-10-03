@@ -4,6 +4,7 @@ import com.bank.transactions.domain.Transaction;
 import com.bank.transactions.domain.TransactionType;
 import com.bank.transactions.repository.TransactionRepository;
 import com.bank.transactions.response.TransactionResponse;
+import com.bank.transactions.service.EmailService;
 import com.bank.transactions.service.TransactionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class TransactionController {
 
     private final TransactionRepository transactionRepository;
     private final TransactionService transactionService;
+    private final EmailService emailService;
 
 
     @GetMapping("/find-all")
@@ -31,6 +33,7 @@ public class TransactionController {
 
     @GetMapping("/bank-statement")
     public ResponseEntity<List<TransactionResponse>> bankStatement(@RequestParam int accountId){
+
         return ResponseEntity.ok().body(TransactionResponse.convert(transactionService.bankStatement(accountId)));
     }
 
@@ -43,6 +46,7 @@ public class TransactionController {
         Transaction thisTransaction = transactionService.deposit(targetAccountId, depositAmmount);
         URI uri =  uriComponentsBuilder.path("/transactions/{id}").
                 buildAndExpand(thisTransaction.getId()).toUri();
+        emailService.sendingTheEmail(thisTransaction);
         return ResponseEntity.created(uri)
                 .body(new TransactionResponse(thisTransaction));
     }

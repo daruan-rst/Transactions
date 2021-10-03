@@ -6,6 +6,7 @@ import com.bank.transactions.repository.AccountRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -17,6 +18,12 @@ public class AccountService {
     public String balance(int accountId){
         Optional<Account> accounts = accountRepository.findById(accountId);
         Account account = accounts.get();
-        return "Seu saldo bancário é de R$:" + account.getMoney();
+        BigDecimal balance = account.getMoney();
+        if (balance.compareTo(BigDecimal.ZERO) == -1){
+            balance = balance.multiply(new BigDecimal("1.01"));
+            account.setMoney(balance);
+            accountRepository.save(account);
+        }
+        return "Seu saldo bancário é de R$:" + balance;
     }
 }

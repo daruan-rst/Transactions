@@ -53,7 +53,9 @@ public class TransactionService {
     }
 
     public List<Transaction> bankStatement(int accountId){
-        return transactionRepository.findTransactionsByCurrentAcc(accountId);
+        Optional<Account> accounts = accountRepository.findById(accountId);
+        Account account = accounts.get();
+        return transactionRepository.findTransactionsByCurrentAcc(account);
     }
 
     private Account withdrawMoney(int currentAccountId, BigDecimal withdrawAmmount){
