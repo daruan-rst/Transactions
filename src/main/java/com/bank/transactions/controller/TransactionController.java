@@ -1,5 +1,6 @@
 package com.bank.transactions.controller;
 
+import com.bank.transactions.domain.PhoneCreditValue;
 import com.bank.transactions.domain.Transaction;
 import com.bank.transactions.domain.TransactionType;
 import com.bank.transactions.repository.TransactionRepository;
@@ -60,10 +61,25 @@ public class TransactionController {
         Transaction thisTransaction = transactionService.withdraw(currentAccountId,withdrawAmmount);
         URI uri =  uriComponentsBuilder.path("/transactions/{id}").
                 buildAndExpand(thisTransaction.getId()).toUri();
+        emailService.sendingTheEmail(thisTransaction);
         return ResponseEntity.created(uri)
                 .body(new TransactionResponse(thisTransaction)); }
 
-    @PostMapping("/transfer_pix")
+    @PostMapping("/phone-credit")
+    public ResponseEntity<TransactionResponse> phoneCredit(
+            @RequestParam int currentAccountId,
+            @RequestParam PhoneCreditValue credit,
+            UriComponentsBuilder uriComponentsBuilder){
+
+        Transaction thisTransaction = transactionService.phoneCredit(currentAccountId,credit);
+        URI uri =  uriComponentsBuilder.path("/transactions/{id}").
+                buildAndExpand(thisTransaction.getId()).toUri();
+        emailService.sendingTheEmail(thisTransaction);
+        return ResponseEntity.created(uri)
+                .body(new TransactionResponse(thisTransaction));
+    }
+
+        @PostMapping("/transfer_pix")
     public ResponseEntity<TransactionResponse> transferPix(
             @RequestParam int currentAccountId,
             @RequestParam int targetAccountId,
@@ -73,6 +89,7 @@ public class TransactionController {
                 .transfer(currentAccountId, targetAccountId, transferAmmount, TransactionType.TRANSFER_PIX);
         URI uri =  uriComponentsBuilder.path("/transactions/{id}").
                 buildAndExpand(thisTransaction.getId()).toUri();
+            emailService.sendingTheEmail(thisTransaction);
         return ResponseEntity.created(uri)
                 .body(new TransactionResponse(thisTransaction)); }
 
@@ -89,6 +106,7 @@ public class TransactionController {
                 .transfer(currentAccountId, targetAccountId, transferAmmount, TransactionType.TRANSFER_TED);
         URI uri =  uriComponentsBuilder.path("/transactions/{id}").
                 buildAndExpand(thisTransaction.getId()).toUri();
+        emailService.sendingTheEmail(thisTransaction);
         return ResponseEntity.created(uri)
                 .body(new TransactionResponse(thisTransaction)); }
 
@@ -106,6 +124,7 @@ public class TransactionController {
 
         URI uri =  uriComponentsBuilder.path("/transactions/{id}").
                 buildAndExpand(thisTransaction.getId()).toUri();
+        emailService.sendingTheEmail(thisTransaction);
         return ResponseEntity.created(uri)
                 .body(new TransactionResponse(thisTransaction)); }
 

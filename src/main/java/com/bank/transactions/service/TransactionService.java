@@ -1,6 +1,7 @@
 package com.bank.transactions.service;
 
 import com.bank.transactions.domain.Account;
+import com.bank.transactions.domain.PhoneCreditValue;
 import com.bank.transactions.domain.Transaction;
 import com.bank.transactions.domain.TransactionType;
 import com.bank.transactions.exceptions.InvalidTimeException;
@@ -47,9 +48,32 @@ public class TransactionService {
 
     public Transaction withdraw(int currentAccountId, BigDecimal withdrawAmmount){
         Account currentAccount = withdrawMoney(currentAccountId, withdrawAmmount);
-        Transaction thisTransaction = new Transaction(0, currentAccount, currentAccountId, withdrawAmmount, TransactionType.WITHDRAW);
+        Transaction thisTransaction = new Transaction(0, currentAccount, currentAccountId, withdrawAmmount, TransactionType.PREPAID_CELL_CREDIT);
         transactionRepository.save(thisTransaction);
     return thisTransaction;
+    }
+
+    public Transaction phoneCredit(int currentAccountId, PhoneCreditValue credit){
+        BigDecimal creditAmmount = new BigDecimal("0.00");
+        switch (credit) {
+            case CINCO:
+                creditAmmount = new BigDecimal("5.00");
+                break;
+            case DEZ:
+                creditAmmount = new BigDecimal("10.00");
+                break;
+            case VINTE:
+                creditAmmount = new BigDecimal("20.00");
+                break;
+            case QUARENTA:
+                creditAmmount = new BigDecimal("40.00");
+                break;
+        }
+
+        Account currentAccount = withdrawMoney(currentAccountId, creditAmmount);
+        Transaction thisTransaction = new Transaction(0, currentAccount, currentAccountId, creditAmmount, TransactionType.WITHDRAW);
+        transactionRepository.save(thisTransaction);
+        return thisTransaction;
     }
 
     public List<Transaction> bankStatement(int accountId){
