@@ -16,6 +16,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     public String balance(int accountId){
+        String message = "";
         Optional<Account> accounts = accountRepository.findById(accountId);
         Account account = accounts.get();
         BigDecimal balance = account.getMoney();
@@ -23,7 +24,8 @@ public class AccountService {
             balance = balance.multiply(new BigDecimal("1.01"));
             account.setMoney(balance);
             accountRepository.save(account);
+            message = "Cuidado! Você entrou no cheque especial\n";
         }
-        return "Seu saldo bancário é de R$:" + balance;
+        return message + "Seu saldo bancário é de R$:" + balance;
     }
 }

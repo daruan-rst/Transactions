@@ -1,4 +1,4 @@
-package com.bank.transactions.domain;
+package com.bank.transactions.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -5,7 +5,6 @@ import com.bank.transactions.domain.PhoneCreditValue;
 import com.bank.transactions.domain.Transaction;
 import com.bank.transactions.domain.TransactionType;
 import com.bank.transactions.exceptions.InvalidTimeException;
-import com.bank.transactions.exceptions.NotEnoughMoneyException;
 import com.bank.transactions.exceptions.OverTheLimitException;
 import com.bank.transactions.repository.AccountRepository;
 import com.bank.transactions.repository.TransactionRepository;
@@ -26,10 +25,6 @@ public class TransactionService {
     private final Calendar now = Calendar.getInstance();
     private final int today = now.get(Calendar.DAY_OF_WEEK);
     private final int hour = now.get(Calendar.HOUR_OF_DAY);
-
-    private boolean hasEnoughMoney(Account account, BigDecimal subtractMoney){
-        return account.getMoney().compareTo(subtractMoney) > 0;
-    }
 
     public Transaction deposit(int targetAccountId, BigDecimal depositAmmount){
         Account targetAccount = depositMoney(targetAccountId, depositAmmount);
@@ -85,9 +80,6 @@ public class TransactionService {
     private Account withdrawMoney(int currentAccountId, BigDecimal withdrawAmmount){
         Optional<Account> account = accountRepository.findById(currentAccountId);
         Account currentAccount = account.get();
-        if(!hasEnoughMoney(currentAccount, withdrawAmmount)){
-            throw new NotEnoughMoneyException();
-        }
         currentAccount.setMoney(currentAccount.getMoney().subtract(withdrawAmmount));
         accountRepository.save(currentAccount);
         return currentAccount;}
