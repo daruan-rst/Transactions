@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,11 @@ public class AccountController {
 
     private final AccountRepository accountRepository;
     private final AccountService accountService;
+
+    @GetMapping("/find-by-accoun-id/{id}")
+    public Account findById(@RequestParam int id){
+        return accountRepository.findAccountByAccountId(id);
+    }
 
     @PostMapping("/create-new")
     public ResponseEntity<AccountResponse> createNewAccount(
@@ -44,6 +50,13 @@ public class AccountController {
     @GetMapping("/balance")
     public ResponseEntity<String> balance(@RequestParam int accountId){
         return ResponseEntity.ok().body(accountService.balance(accountId));
+    }
+
+    @PutMapping("/update-money/{accountId}")
+    public void updateMoney(@RequestParam int accountId, @RequestParam BigDecimal money){
+        Account thisAccount = accountRepository.findAccountByAccountId(accountId);
+        thisAccount.setMoney(thisAccount.getMoney().add(money));
+        accountRepository.save(thisAccount);
     }
 
 
