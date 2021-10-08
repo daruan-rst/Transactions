@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     public static SendEmail makeEmail(Transaction transaction){
-        return new SendEmail(transaction.getCurrentAcc().getEmail(),
+        return new SendEmail(transaction.getCurrentAcc().getUserName(),
+                transaction.getCurrentAcc().getEmail(),
                 String.valueOf(transaction.getCurrentAcc().getAccountId()),
                 String.valueOf(transaction.getTargetAcc()),
                 transaction.getMoney(),

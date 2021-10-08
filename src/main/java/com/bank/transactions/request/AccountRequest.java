@@ -19,9 +19,7 @@ public class AccountRequest {
 
     private BigDecimal money;
 
-    private AccountType accountType;
-
-    public Account convert(){
-        return new Account(this.accountId, this.userId, this.email, this.money, this.accountType);
+    public Account convert(AccountType accountType){
+        return new Account(this.accountId, this.userId, "" , this.email, this.money, accountType);
     }
 }

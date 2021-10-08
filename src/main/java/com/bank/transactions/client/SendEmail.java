@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @ToString
 public class SendEmail {
 
+    private String userName;
     private String email;
     private String currentAccount;
     private String targetAccount;

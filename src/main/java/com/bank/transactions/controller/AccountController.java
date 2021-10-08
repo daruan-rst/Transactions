@@ -1,7 +1,10 @@
 package com.bank.transactions.controller;
 
 
+import com.bank.transactions.client.UserClient;
 import com.bank.transactions.domain.Account;
+import com.bank.transactions.domain.AccountType;
+import com.bank.transactions.exceptions.InvalidUserException;
 import com.bank.transactions.repository.AccountRepository;
 import com.bank.transactions.request.AccountRequest;
 import com.bank.transactions.response.AccountResponse;
@@ -32,15 +35,17 @@ public class AccountController {
 
     @PostMapping("/create-new")
     public ResponseEntity<AccountResponse> createNewAccount(
+            @RequestParam AccountType accountType,
             @RequestBody AccountRequest accountRequest,
             UriComponentsBuilder uriComponentsBuilder
     ){
-        Account account = accountRequest.convert();
+        Account account = accountService.userVerification(accountRequest, accountType);
         accountRepository.save(account);
         URI uri = uriComponentsBuilder.path("/accounts/{id}")
                 .buildAndExpand(account.getAccountId()).toUri();
         return ResponseEntity.created(uri).body(new AccountResponse(account));
     }
+
 
     @GetMapping("/find-all")
     public ResponseEntity<List<AccountResponse>> findAll(){

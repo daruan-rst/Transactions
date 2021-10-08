@@ -15,6 +15,8 @@ public class AccountResponse {
 
     private String userId;
 
+    private String userName;
+
     private String email;
 
     private BigDecimal money;
@@ -24,6 +26,7 @@ public class AccountResponse {
     public AccountResponse (Account acc){
         this.accountId = acc.getAccountId();
         this.userId = acc.getUserId();
+        this.userName = acc.getUserName();
         this.email = acc.getEmail();
         this.money = acc.getMoney();
         this.accountType = acc.getAccountType();

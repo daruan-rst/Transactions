@@ -17,10 +17,14 @@ public class Account {
 
     @Id
     @Column(name = "account_id")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int accountId;
 
+    @Setter
     private String userId;
+
+    @Setter
+    private String userName;
 
     private String email;
 
