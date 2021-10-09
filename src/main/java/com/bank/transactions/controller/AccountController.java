@@ -28,9 +28,9 @@ public class AccountController {
     private final AccountRepository accountRepository;
     private final AccountService accountService;
 
-    @GetMapping("/find-by-accoun-id/{id}")
-    public Account findById(@RequestParam int id){
-        return accountRepository.findAccountByAccountId(id);
+    @GetMapping("/find-by-account-id/")
+    public String findById(@RequestParam int accountId){
+        return accountService.isThereSuchAccount(accountId);
     }
 
     @PostMapping("/create-new")
@@ -46,7 +46,6 @@ public class AccountController {
         return ResponseEntity.created(uri).body(new AccountResponse(account));
     }
 
-
     @GetMapping("/find-all")
     public ResponseEntity<List<AccountResponse>> findAll(){
         var account = accountRepository.findAll();
@@ -59,11 +58,11 @@ public class AccountController {
 
     @PutMapping("/update-money/{accountId}")
     public void updateMoney(@RequestParam int accountId, @RequestParam BigDecimal money){
-        Account thisAccount = accountRepository.findAccountByAccountId(accountId);
+        Optional<Account> optionalAccount = accountRepository.findAccountByAccountId(accountId);
+        Account thisAccount = optionalAccount.get();
         thisAccount.setMoney(thisAccount.getMoney().add(money));
         accountRepository.save(thisAccount);
     }
-
 
     @DeleteMapping("/delete")
     public ResponseEntity<AccountResponse> deleteAccount(@RequestParam int accountId){

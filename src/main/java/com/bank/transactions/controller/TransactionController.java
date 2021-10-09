@@ -24,7 +24,6 @@ public class TransactionController {
 
     private final TransactionRepository transactionRepository;
     private final TransactionService transactionService;
-    private final EmailService emailService;
     private final SendEmailClient sendEmailClient;
 
 
@@ -71,12 +70,14 @@ public class TransactionController {
     public ResponseEntity<TransactionResponse> phoneCredit(
             @RequestParam int currentAccountId,
             @RequestParam PhoneCreditValue credit,
+            @RequestParam String phoneNumber,
             UriComponentsBuilder uriComponentsBuilder){
 
         Transaction thisTransaction = transactionService.phoneCredit(currentAccountId,credit);
         URI uri =  uriComponentsBuilder.path("/transactions/{id}").
                 buildAndExpand(thisTransaction.getId()).toUri();
         sendEmailClient.sendingTheEmail(EmailService.makeEmail(thisTransaction));
+        System.out.println("Foram adicionados "+ credit + " reais de crédito ao seu celular!\nAproveite");
         return ResponseEntity.created(uri)
                 .body(new TransactionResponse(thisTransaction));
     }

@@ -47,4 +47,15 @@ public class AccountService {
         account.setUserId(userData.get(0));
         return account;
     }
+
+    public String isThereSuchAccount(int id){
+        Optional<Account> optionalAccount =  accountRepository.findAccountByAccountId(id);
+        if (optionalAccount.isEmpty()){
+            return "NotSuchAccount";
+        }else if(optionalAccount.get().getAccountType() == AccountType.POUPANCA){
+            return "InvalidAccountType";
+        }
+        else{
+        return String.valueOf(optionalAccount.get().getAccountId());}
+    }
 }

@@ -87,7 +87,7 @@ public class TransactionService {
     public Transaction transfer(int currentAccountId, int targetAccountId, BigDecimal transferMoney, TransactionType transferType){
         Account currentAccount = withdrawMoney(currentAccountId, transferMoney);
         Account targetAccount = depositMoney(targetAccountId, transferMoney);
-        Transaction thisTransaction = new Transaction(0, currentAccount, targetAccountId, transferMoney, transferType);
+        Transaction thisTransaction = new Transaction(0, currentAccount, targetAccount.getAccountId(), transferMoney, transferType);
         transactionRepository.save(thisTransaction);
         return thisTransaction;
     }

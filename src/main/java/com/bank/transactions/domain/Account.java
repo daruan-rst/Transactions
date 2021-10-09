@@ -31,6 +31,7 @@ public class Account {
     @Setter
     private BigDecimal money;
 
+    @Enumerated(EnumType.STRING)
     private AccountType accountType;
 
 
