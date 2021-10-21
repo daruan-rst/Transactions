@@ -7,7 +7,10 @@ import com.bank.transactions.domain.AccountType;
 import com.bank.transactions.exceptions.InvalidUserException;
 import com.bank.transactions.repository.AccountRepository;
 import com.bank.transactions.request.AccountRequest;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,6 +24,8 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserClient userClient;
+    private static final String USER_SERVICE = "userService";
+
 
     public String balance(int accountId){
         String message = "";
@@ -36,6 +41,7 @@ public class AccountService {
         return message + "Seu saldo bancário é de R$:" + balance;
     }
 
+    @CircuitBreaker(name = USER_SERVICE, fallbackMethod = "userFallback")
     public Account userVerification(AccountRequest accountRequest, AccountType accountType){
         String cpfRequest =  accountRequest.getUserId();
         if (userClient.doesThisUserExist(cpfRequest).equals("UserNotFound")){
@@ -58,4 +64,7 @@ public class AccountService {
         else{
         return String.valueOf(optionalAccount.get().getAccountId());}
     }
+
+    public ResponseEntity<String> userFallback(Exception e){
+        return new ResponseEntity<String>("User service is down", HttpStatus.OK);}
 }
